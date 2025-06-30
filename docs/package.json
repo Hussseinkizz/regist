@@ -1,6 +1,6 @@
 {
   "name": "regist-docs",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "private": true,
   "scripts": {
     "build": "next build",
@@ -8,7 +8,7 @@
     "start": "next start",
     "postinstall": "fumadocs-mdx",
     "build:gh": "GITHUB_PAGES=true next build",
-    "deploy": "pnpm run build:gh && pnpm dlx gh-pages -d out --nojekyll --cname https://regist.github.io"
+    "deploy": "pnpm run build:gh && pnpm dlx gh-pages -d out --nojekyll --cname https://hussseinkizz.github.io/regist"
   },
   "dependencies": {
     "fumadocs-core": "15.2.5",
