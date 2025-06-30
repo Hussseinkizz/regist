@@ -1,0 +1,77 @@
+---
+title: Assertion API
+description: Learn how to use the assertThat API for fluent and chainable string validation.
+---
+
+The `assertThat` API is the cornerstone of string validation in Regist. It offers a fluent and chainable interface for making assertions about your strings, allowing you to verify everything from email formats to password strength with ease.
+
+## Getting Started
+
+To begin using the `assertThat` API, import the `assertThat` function from the `regist` library. Pass the string you want to validate to this function, and then chain the desired assertion methods.
+
+```typescript
+import { assertThat } from 'regist';
+
+// Example: Check if a string is a valid email address
+const isValidEmail = assertThat('test@example.com').isEmail().try(); // Returns true
+
+// Example: Validate a strong password
+const isStrong = assertThat('Password123!').isStrongPassword().try(); // Returns true
+```
+
+## Chaining Assertions
+
+The power of the `assertThat` API lies in its ability to chain multiple assertions together. This enables you to build complex and precise validation rules in a readable and maintainable way.
+
+```typescript
+import { assertThat } from 'regist';
+
+// Example: Validate a username
+const isValidUsername = assertThat('testuser')
+  .isAlphaNumeric()
+  .lengthIs({ min: 3, max: 20 })
+  .try(); // Returns true
+```
+
+## API Reference
+
+Below is a comprehensive list of the assertion methods available in the `assertThat` API.
+
+| Method | Description |
+| --- | --- |
+| `.has(str)` | Checks if the string contains a specific substring. |
+| `.doesNotHave(str)` | Checks if the string does NOT contain a specific substring. |
+| `.startsWith(str)` | Checks if the string starts with a specific substring. |
+| `.endsWith(str)` | Checks if the string ends with a specific substring. |
+| `.isExactly(str)` | Checks for an exact match to the provided string. |
+| `.isNot()` | Negates the next assertion in the chain. |
+| `.isAlpha()` | Checks if all characters in the string are letters. |
+| `.isAlphaNumeric()` | Checks if all characters are letters or digits. |
+| `.hasAllUppercase()` | Checks if all letters in the string are uppercase. |
+| `.hasAllLowercase()` | Checks if all letters in the string are lowercase. |
+| `.isUpperCase()` | Checks if the string contains at least one uppercase letter. |
+| `.isLowerCase()` | Checks if the string contains at least one lowercase letter. |
+| `.isDigit()` | Checks if all characters in the string are digits. |
+| `.isNumeric()` | Checks if the string can be converted to a number. |
+| `.isWhitespace()` | Checks if all characters are whitespace. |
+| `.isEmail()` | Checks if the string is a valid email address. |
+| `.isUrl()` | Checks if the string is a valid URL. |
+| `.isUrlSafe()` | Checks if the string contains only URL-safe characters. |
+| `.isPhone(preset)` | Checks for a valid phone number based on a country preset (e.g., 'US', 'UG'). |
+| `.isNumberConvertible()` | Checks if the string can be safely converted to a number. |
+| `.passesRegex(regex)` | Checks if the string matches a custom regex pattern. |
+| `.failsRegex(regex)` | Checks if the string does NOT match a custom regex pattern. |
+| `.anyOf(...values)` | Checks if the string is equal to any of the provided values. |
+| `.lengthIs(n \| {min,max})` | Checks if the string's length is a specific number or within a range. |
+| `.isBetween(start, end)` | Checks if a substring exists between two markers. |
+| `.hasNoEmoji()` | Checks if the string contains no emoji. |
+| `.anagram(str)` | Checks if the string is an anagram of the provided string. |
+| `.isPalindrome()` | Checks if the string is a palindrome. |
+| `.hasUniqueCharacters()` | Checks if all characters in the string are unique. |
+| `.whereValueAt(idx).is(val)` | Checks if the character at a specific index matches a value. |
+| `.wordCount()` | Checks the number of words in the string. |
+| `.isBase64()` | Checks if the string is a valid base64 string. |
+| `.isStrongPassword()` | Checks for strong password criteria (min 8 chars, upper, lower, digit, special char). |
+| `.customCheck(fn)` | Applies a custom predicate function for validation. |
+| `.stringTransform()` | Switches to the `stringTransform` API with the current string value. |
+| `.try(handler?)` | Executes the assertion chain, returning `true` or `false`. If a handler is provided, it's called on error. |

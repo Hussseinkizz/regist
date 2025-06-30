@@ -1,0 +1,110 @@
+{
+  "name": "regist",
+  "version": "0.0.1",
+  "description": "A declarative, human readable and friendly syntax sugar for regex.",
+  "type": "module",
+  "private": false,
+  "license": "MIT",
+  "author": {
+    "name": "Hussein Kizz",
+    "email": "hssnkizz@gmail.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Hussseinkizz/regist.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Hussseinkizz/regist/issues"
+  },
+  "homepage": "https://z-fetch.github.io/z-fetch",
+  "keywords": [
+    "typescript",
+    "vite",
+    "library",
+    "zod",
+    "regex",
+    "fumadocs",
+    "tsup"
+  ],
+  "sideEffects": false,
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/index.umd.js",
+  "module": "./dist/index.es.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    }
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsup",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "type-check": "tsc --noEmit",
+    "lint": "eslint --fix",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
+    "size": "size-limit",
+    "size:analyze": "size-limit --why",
+    "check-exports": "attw --pack . --ignore-rules=cjs-resolves-to-esm",
+    "prepare": "pnpm run build",
+    "preversion": "pnpm run type-check && pnpm run lint && pnpm run test",
+    "version": "changeset version && pnpm run format && git add -A",
+    "postversion": "git push origin main --follow-tags",
+    "prepublishOnly": "pnpm run export",
+    "publish": "changeset publish",
+    "clean": "rm -rf dist",
+    "export": "pnpm run clean && pnpm run type-check && pnpm run lint && pnpm run build && pnpm run check-exports && pnpm run size"
+  },
+  "devDependencies": {
+    "@arethetypeswrong/cli": "^0.16.4",
+    "@biomejs/biome": "2.0.5",
+    "@changesets/cli": "^2.27.9",
+    "@size-limit/preset-small-lib": "^11.1.0",
+    "@typescript-eslint/eslint-plugin": "^8.11.0",
+    "@typescript-eslint/parser": "^8.11.0",
+    "@vitest/coverage-istanbul": "3.0.8",
+    "@vitest/coverage-v8": "^1.0.0",
+    "eslint": "^9.13.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.2.1",
+    "prettier": "^3.0.0",
+    "rollup-plugin-dts": "^6.0.0",
+    "size-limit": "^11.1.0",
+    "tsup": "^8.4.0",
+    "typescript": "^5.8.2",
+    "ultracite": "5.0.26",
+    "vitest": "^3.1.1"
+  },
+  "packageManager": "pnpm@10.6.3",
+  "size-limit": [
+    {
+      "path": "dist/index.js",
+      "limit": "10 kb"
+    },
+    {
+      "path": "dist/index.cjs",
+      "limit": "10 kb"
+    }
+  ],
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild"
+    ]
+  }
+}

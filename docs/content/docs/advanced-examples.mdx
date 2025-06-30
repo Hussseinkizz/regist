@@ -1,0 +1,151 @@
+---
+title: Advanced Usage
+description: Explore advanced use cases for Regist, including complex chaining, custom logic, and integration with other libraries.
+---
+
+Regist is not just for basic validation and transformation. Its flexible and composable nature makes it a powerful tool for solving a wide range of complex problems, from algorithmic challenges to real-world data processing tasks.
+
+## Algorithmic-Style Problems
+
+Regist's expressive API makes it well-suited for solving common algorithm problems.
+
+### Palindrome Check
+
+A classic problem with a simple and readable solution using Regist.
+
+```typescript
+import { stringTransform } from 'regist';
+
+const isPalindrome = stringTransform('A man, a plan, a canal: Panama')
+  .sanitize({ removeSpaces: true, removeSpecial: true })
+  .toLowerCase()
+  .assertThat()
+  .isPalindrome()
+  .try(); // Returns true
+```
+
+### Anagram Check
+
+Effortlessly check if two strings are anagrams of each other.
+
+```typescript
+import { assertThat } from 'regist';
+
+const areAnagrams = assertThat('listen').anagram('silent').try(); // Returns true
+```
+
+### Grouping Anagrams
+
+This common coding challenge can be solved elegantly by hashing sorted strings.
+
+```typescript
+import { stringTransform } from 'regist';
+
+const words = ['eat', 'tea', 'tan', 'ate', 'nat', 'bat'];
+
+const groupedAnagrams = words.reduce((acc, word) => {
+  // Sort characters to create a canonical representation for anagrams
+  const canonical = stringTransform(word).customTransform(s => s.split('').sort().join('')).try();
+  if (!acc[canonical]) {
+    acc[canonical] = [];
+  }
+  acc[canonical].push(word);
+  return acc;
+}, {} as Record<string, string[]>);
+
+// Result: { 'aet': ['eat', 'tea', 'ate'], 'ant': ['tan', 'nat'], 'abt': ['bat'] }
+```
+
+## Real-World Use Cases
+
+### Slugifying a Blog Post Title
+
+Create a URL-friendly slug from a title.
+
+```typescript
+import { stringTransform } from 'regist';
+
+const title = 'My Awesome Blog Post!';
+
+const slug = stringTransform(title)
+  .toLowerCase()
+  .sanitize({ removeSpecial: true })
+  .replaceAll(' ', '-')
+  .try(); // 'my-awesome-blog-post'
+```
+
+### Extracting Data from Logs
+
+Extract specific information, like a user ID, from a log entry.
+
+```typescript
+import { stringTransform } from 'regist';
+
+const logEntry = "[2025-06-30T12:00:00Z] INFO: User 'user-123' logged in.";
+
+const userId = stringTransform(logEntry)
+  .extractWhenBetween("User '", "' logged in.")
+  .try(); // 'user-123'
+```
+
+## Advanced Techniques
+
+### Chaining and Interoperability
+
+Seamlessly switch between the `assertThat` and `stringTransform` APIs in a single, fluent chain.
+
+```typescript
+import { stringTransform } from 'regist';
+
+const result = stringTransform("  Hello World!  ")
+  .trim()
+  .toLowerCase()
+  .assertThat() // Switch to the assertion API
+  .isExactly("hello world!")
+  .try(); // Returns true
+```
+
+### Custom Logic and Error Handling
+
+Define your own validation and transformation logic, and handle potential errors gracefully.
+
+```typescript
+import { assertThat, stringTransform } from 'regist';
+
+// Custom validation check
+const isPalindrome = assertThat("racecar")
+  .customCheck(str => str === str.split("").reverse().join(""))
+  .try(); // Returns true
+
+// Graceful error handling
+stringTransform("abc")
+  .extract(/\d+/) // This will fail
+  .try((err, step, valueBefore) => {
+    console.error(`Error during step: ${step}`); // 'extract'
+    console.error(`Input value was: ${valueBefore}`); // 'abc'
+    // err.message will contain "No match found"
+  }); // Returns null and calls the handler
+```
+
+### Reusability and Integration
+
+Regist chains are reusable objects. You can define them once and use them in multiple contexts. They also integrate smoothly with other libraries like Zod.
+
+```typescript
+import { z } from "zod";
+import { assertThat } from "regist";
+
+// Reusable chain
+const snakeCaseChain = stringTransform("fooBar").toSnakeCase();
+const snake = snakeCaseChain.try(); // "foo_bar"
+const upperSnake = snakeCaseChain.toUpperCase().try(); // "FOO_BAR"
+
+// Integration with Zod for schema validation
+const usernameSchema = z.string().refine(
+  val => assertThat(val).isAlphaNumeric().lengthIs({ min: 3, max: 20 }).try(),
+  { message: "Username must be 3-20 alphanumeric characters." }
+);
+
+usernameSchema.parse("user123"); // Passes
+// usernameSchema.parse("!@#"); // Throws a ZodError
+```

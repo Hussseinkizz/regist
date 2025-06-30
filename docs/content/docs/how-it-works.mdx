@@ -1,0 +1,109 @@
+---
+title: How It Works
+description: Understand the core principles of Regist, including lazy evaluation, chaining, reusability, and error handling.
+---
+
+Regist is designed to be intuitive, but understanding its core principles will help you unlock its full potential. This guide covers the key concepts of lazy evaluation, chaining, reusability, and error handling.
+
+## Lazy Evaluation
+
+At the heart of Regist is the principle of **lazy evaluation**. This means that no operations are actually performed when you chain methods together. A Regist chain is simply a blueprint of the steps to be taken.
+
+The chain is only executed when you call the `.try()` method. This design has several advantages:
+
+- **Performance:** No unnecessary work is done until you explicitly ask for the result.
+- **Predictability:** The order of operations is clear and the execution is deterministic.
+- **Reusability:** Since chains are just blueprints, they can be stored, passed around, and reused multiple times.
+
+```typescript
+import { stringTransform } from 'regist';
+
+// This chain doesn't do any work yet. It's just a plan.
+const trimAndUpper = stringTransform('  hello world  ').trim().toUpperCase();
+
+// The magic happens now, when .try() is called.
+const result = trimAndUpper.try(); // "HELLO WORLD"
+```
+
+## Chaining and Interoperability
+
+Regist features two distinct but interoperable APIs: `assertThat` for validation and `stringTransform` for transformation. You can seamlessly switch between them in a single, fluent chain.
+
+- Use `.assertThat()` to switch from a transformation chain to a validation chain.
+- Use `.stringTransform()` to switch from a validation chain to a transformation chain.
+
+This allows you to create powerful and expressive logic that combines validation and transformation in a natural way.
+
+```typescript
+import { assertThat, stringTransform } from 'regist';
+
+// Start with a transformation, switch to assertion, and then back to transformation
+const finalResult = stringTransform("  regist is awesome  ")
+  .trim() // -> "regist is awesome"
+  .assertThat() // Switch to assertion API
+  .startsWith("regist") // -> true
+  .stringTransform() // Switch back to transformation API
+  .toPascalCase() // -> "RegistIsAwesome"
+  .try();
+
+console.log(finalResult); // "RegistIsAwesome"
+```
+
+## Reusability
+
+Because of lazy evaluation, Regist chains are highly reusable. You can create a base chain of operations and then branch off from it to create more specialized chains without affecting the original.
+
+This is incredibly useful for creating a library of common validation or transformation patterns that can be used throughout your application.
+
+```typescript
+import { stringTransform } from 'regist';
+
+// Create a base chain to sanitize a username
+const baseUsername = stringTransform('  Test_User-123  ')
+  .trim()
+  .toLowerCase();
+
+// Reuse the base chain for different purposes
+const asSnakeCase = baseUsername.toSnakeCase().try(); // "test_user_123"
+const asPascalCase = baseUsername.toPascalCase().try(); // "TestUser123"
+
+// The original chain remains unaffected
+const original = baseUsername.try(); // "test_user_123"
+```
+
+## Error Handling
+
+Regist provides a simple yet powerful way to handle errors. The `.try()` method can optionally accept a handler function that will be called if any step in the chain fails.
+
+This handler receives three arguments:
+
+1.  `error`: An `Error` object with a descriptive message.
+2.  `stepName`: The name of the method that failed (e.g., `"extract"`, `"isEmail"`).
+3.  `valueAtFailure`: The value of the string just before the failing step was executed.
+
+If you don't provide a handler, Regist will throw an error, which you can catch with a standard `try...catch` block. If no error occurs, `.try()` returns the result of the chain (`true`/`false` for assertions, or the transformed string).
+
+```typescript
+import { stringTransform } from 'regist';
+
+// Example: Handling an error gracefully
+const result = stringTransform("no-digits-here")
+  .extract(/\d+/) // This step will fail because there are no digits
+  .try((error, stepName, valueAtFailure) => {
+    console.error(`An error occurred during the '${stepName}' step.`);
+    console.error(`The input value was: '${valueAtFailure}'`);
+    console.error(`Error message: ${error.message}`);
+    // You can add custom logic here, like logging to a service
+  });
+
+if (result === null) {
+  console.log("The transformation failed as expected.");
+}
+
+// If no handler is provided, errors are thrown
+try {
+  stringTransform("no-digits-here").extract(/\d+/).try();
+} catch (e) {
+  console.log(e.message); // "No match found for pattern: /\d+/"
+}
+```

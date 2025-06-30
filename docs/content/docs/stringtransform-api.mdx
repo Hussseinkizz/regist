@@ -1,0 +1,74 @@
+---
+title: Transformation API
+description: Learn how to use the stringTransform API for powerful and chainable string manipulations.
+---
+
+The `stringTransform` API is your tool for all string manipulation tasks. It enables you to transform strings in various ways, from simple case conversions to complex data extractions and sanitizations, all through a fluent and chainable interface.
+
+## Getting Started
+
+To use the `stringTransform` API, import the `stringTransform` function from the `regist` library. Pass your string to this function, and then chain any of the available transformation methods.
+
+```typescript
+import { stringTransform } from 'regist';
+
+// Example: Convert a string to snake_case
+const snakeCase = stringTransform('someStringToConvert').toSnakeCase().try(); 
+// Result: 'some_string_to_convert'
+
+// Example: Sanitize a string by removing spaces and special characters
+const sanitized = stringTransform('  Hello World!  ').sanitize({ removeSpaces: true, removeSpecial: true }).try(); 
+// Result: 'HelloWorld'
+```
+
+## Chaining Transformations
+
+Like the `assertThat` API, the `stringTransform` API is fully chainable. This allows you to apply multiple transformations in a single, elegant statement, making your code both concise and readable.
+
+```typescript
+import { stringTransform } from 'regist';
+
+const transformed = stringTransform('  some string  ')
+  .trim()
+  .toUpperCase()
+  .toSnakeCase()
+  .try(); // Result: 'SOME_STRING'
+```
+
+## API Reference
+
+Here is a comprehensive list of the transformation methods available in the `stringTransform` API.
+
+| Method | Description |
+| --- | --- |
+| `.toUpperCase()` | Converts the entire string to uppercase. |
+| `.toLowerCase()` | Converts the entire string to lowercase. |
+| `.toPascalCase()` | Converts the string to PascalCase. |
+| `.toSnakeCase()` | Converts the string to snake_case. |
+| `.toCamelCase()` | Converts the string to camelCase. |
+| `.trim()` | Removes leading and trailing whitespace. |
+| `.split(separator).takeThatAt(idx)` | Splits the string by a separator and returns the item at a specified index. |
+| `.split(separator).join(sep)` | Splits the string by a separator and joins the items with a new separator. |
+| `.getCharacterAt(idx)` | Returns the character at a specified index. |
+| `.getRandomFrom()` | Returns a random character from the string. |
+| `.replace(search, rep)` | Replaces the first occurrence of a substring. |
+| `.replaceAll(search, rep)` | Replaces all occurrences of a substring. |
+| `.removeFirst(search)` | Removes the first occurrence of a substring. |
+| `.removeAll(search)` | Removes all occurrences of a substring. |
+| `.add({prefix, suffix})` | Adds a prefix and/or suffix to the string. |
+| `.pad(len, char, where)` | Pads the string to a specific length with a given character. |
+| `.randomize()` | Shuffles the characters in the string. |
+| `.chunk(size, sep?)` | Splits the string into chunks of a given size. |
+| `.breakToLines(lineLen)` | Wraps the string into lines of a specific length. |
+| `.extract(pattern)` | Extracts a substring that matches a regex pattern. |
+| `.extractInRange(start, end)` | Extracts a substring within a given index range. |
+| `.extractWhenBetween(prefix, suffix)` | Extracts a substring located between two other substrings. |
+| `.toHex()` | Converts the string to its hexadecimal representation. |
+| `.toBinary()` | Converts the string to its binary representation. |
+| `.toURLSafe()` | Encodes the string to be URL-safe. |
+| `.toHash()` | Hashes the string using the djb2 algorithm. |
+| `.customTransform(fn)` | Applies a custom function for string transformation. |
+| `.sanitize(opts)` | Removes spaces, digits, or special characters from the string. |
+| `.escapeString()` / `.unEscapeString()` | Escapes or unescapes special regex characters. |
+| `.assertThat()` | Switches to the `assertThat` API with the current string value. |
+| `.try(handler?)` | Executes the transformation chain and returns the result. If a handler is provided, it is called on error. |
