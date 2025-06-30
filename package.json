@@ -1,5 +1,5 @@
 {
-  "name": "regist",
+  "name": "@regist/regist",
   "version": "0.0.1",
   "description": "A declarative, human readable and friendly syntax sugar for regex.",
   "type": "module",

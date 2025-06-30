@@ -131,7 +131,7 @@ export default function Home() {
         <section className="w-full max-w-xl">
           <div className="overflow-x-auto rounded-lg border border-zinc-800 bg-zinc-900 p-4">
             <pre className="text-center font-mono text-sm text-violet-200">
-              <code>{'npm install regist'}</code>
+              <code>{'npm install @regist/regist'}</code>
             </pre>
           </div>
         </section>
