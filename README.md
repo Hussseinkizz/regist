@@ -24,7 +24,7 @@ Regist is a declarative, type-safe, and human-readable library for string valida
 ## 📦 Installation
 
 ```bash
-npm install regist
+npm install @regist/regist
 ```
 
 ## 🚀 Usage Examples

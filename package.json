@@ -1,6 +1,6 @@
 {
   "name": "@regist/regist",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A declarative, human readable and friendly syntax sugar for regex.",
   "type": "module",
   "private": false,

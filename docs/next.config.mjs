@@ -8,8 +8,8 @@ const withMDX = createMDX();
 const config = {
   reactStrictMode: true,
   output: "export",
-  assetPrefix: isGithubPages ? "/z-fetch/" : undefined,
-  basePath: isGithubPages ? "/z-fetch" : undefined,
+  assetPrefix: isGithubPages ? "/regist/" : undefined,
+  basePath: isGithubPages ? "/regist" : undefined,
   images: {
     unoptimized: true, // Required because export doesn't support optimized images
   },
